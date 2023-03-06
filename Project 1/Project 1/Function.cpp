@@ -1,6 +1,5 @@
 #include "Function.h"
 
-
 void displayCourse(Course* pHead)
 {
 	cout
@@ -40,7 +39,6 @@ void displayCourse(Course* pHead)
 
 }
 
-
 void addCourse(Course*& pHead)
 {
 	Course* cur;
@@ -77,11 +75,34 @@ void addCourse(Course*& pHead)
 
 void deleteCourse(Course*& pHead)
 {
+	int getID;
+	cout << "Enter the Course ID which you want to delete: ";
+	cin >> getID;
+	while (getID <= 0)
+	{
+		cout << "Invalid input. Please try a new course ID: ";
+		cin >> getID;
+	}
 
-
+	Course* cur;
+	cur = pHead;
+	Course* temp = cur;
+	while (cur != nullptr && cur->id != getID)
+	{
+		temp = cur;
+		cur = cur->pNext;
+	}
+	if (cur != nullptr)
+	{
+		if (temp == pHead)
+			pHead = temp->pNext;
+		else
+			temp->pNext = cur->pNext;
+		delete cur;
+		return;
+	}
+	cout << "There is no Course ID matching with your typing: " << endl;
 }
-
-
 
 void update_course_ID(Course*& cur)
 {
@@ -226,4 +247,16 @@ void updateCourse(Course*& pHead)
 	}
 	cout << "Not found Course ID!!!";
 	return;
+}
+
+void deAllocateCourse(Course*& pHead)
+{
+	Course* cur = pHead;
+	Course* temp = cur->pNext;
+	while (cur != nullptr)
+	{
+		delete cur;
+		cur = temp;
+		temp = temp->pNext;
+	}
 }

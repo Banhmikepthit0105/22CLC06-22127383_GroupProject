@@ -26,4 +26,24 @@ struct Course
 	Course* pNext;
 };
 
+void displayCourse(Course* pHead);
+
+void addCourse(Course*& pHead);
+
+void deleteCourse(Course*& pHead);
+
+void update_course_ID(Course*& cur);
+void update_course_name(Course*& cur);
+void update_class_name(Course*& cur);
+void update_number_credits(Course*& cur);
+void update_number_students(Course*& cur);
+void update_day_week(Course*& cur);
+void update_session(Course*& cur);
+
+void update(Course*& cur);
+
+void updateCourse(Course*& pHead);
+
+void deAllocateCourse(Course*& pHead);
+
 #endif
