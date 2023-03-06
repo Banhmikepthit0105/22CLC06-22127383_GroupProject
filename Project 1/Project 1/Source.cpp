@@ -1,10 +1,8 @@
-#include <iostream>
-using namespace std;
+#include "Function.h"
 
 int main()
 {
-	cout << "Hello World ";
-
+	ios_base::sync_with_stdio(false);
 
 	return 0;
 }
