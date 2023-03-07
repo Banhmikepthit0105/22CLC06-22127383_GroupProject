@@ -260,3 +260,86 @@ void deAllocateCourse(Course*& pHead)
 		temp = temp->pNext;
 	}
 }
+
+
+void addStudentCourse(ofstream& csvfile, Course* pHead)
+{
+	int getID;
+	string get;
+	cout << "Enter the course ID: ";
+	cin >> get;
+
+	getID = stoi(get);
+	bool isFound = false;
+
+	Course* cur;
+	cur = pHead;
+
+	
+	while (cur != nullptr && cur->id != getID)
+	{
+		cur = cur->pNext;
+	}
+
+	if (cur != nullptr)
+	{
+		isFound = true;
+	}
+	
+	if (!isFound)
+	{
+		cout << "There is no course ID matching with your typing ";
+		return;
+	}
+	int ID_student;
+	cout << "Enter ID of student: ";
+	cin >> ID_student;
+	string s1;
+	cout << "Enter name of student: ";
+	getline(cin, s1);
+	csvfile.open("course" + get + ".csv", ios::app);
+	csvfile << ID_student << "," << s1;
+
+	csvfile.close();
+	cout << "Add Student to Course successfully";
+}
+
+void deleteStudentCourse(ofstream& csvfile, Course* pHead)
+{
+	int getID;
+	string get;
+	cout << "Enter the course ID: ";
+	cin >> get;
+
+	getID = stoi(get);
+	bool isFound = false;
+
+	Course* cur;
+	cur = pHead;
+
+
+	while (cur != nullptr && cur->id != getID)
+	{
+		cur = cur->pNext;
+	}
+
+	if (cur != nullptr)
+	{
+		isFound = true;
+	}
+
+	if (!isFound)
+	{
+		cout << "There is no course ID matching with your typing ";
+		return;
+	}
+
+	int ID_student;
+	cout << "Enter ID of student you want to delete: ";
+	cin >> ID_student;
+
+	while (!csvfile.eof())
+	{
+
+	}
+}

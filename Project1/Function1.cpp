@@ -3,5 +3,5 @@
 
 void addStudentCourse(ofstream& csvfile)
 {
-	csvfile.open("students")
+	csvfile.open("students");
 }

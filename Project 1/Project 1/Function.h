@@ -7,6 +7,8 @@
 #include <iostream>
 #include <cstring>
 #include <string>
+#include <string.h>
+#include <fstream>
 #include <iomanip>
 #include <cmath>
 typedef long long ll;
