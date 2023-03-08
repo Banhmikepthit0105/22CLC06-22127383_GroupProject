@@ -23,6 +23,7 @@ struct Course
 	string class_name;
 	int number_credits;
 	int number_students;
+	string teacher_name;
 	string day_of_week;
 	string sessions;
 	Course* pNext;

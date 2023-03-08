@@ -9,6 +9,8 @@ void displayCourse(Course* pHead)
 		<< "Course Name"
 		<< setw(20)
 		<< "Class Name"
+		<< setw(20)
+		<< "Teacher Name"
 		<< setw(10)
 		<< "Number of credits"
 		<< setw(10)
@@ -26,6 +28,8 @@ void displayCourse(Course* pHead)
 			<< pHead->course_name
 			<< setw(20)
 			<< pHead->class_name
+			<< setw(20)
+			<< pHead->teacher_name
 			<< setw(20)
 			<< pHead->number_credits
 			<< setw(10)
@@ -54,6 +58,9 @@ void addCourse(Course*& pHead)
 
 	cout << "Enter Class Name";
 	getline(cin, pHead->class_name);
+
+	cout << "Enter Teacher Name";
+	getline(cin, pHead->teacher_name);
 
 	cout << "Enter Number of credits: ";
 	cin >> pHead->number_credits;
@@ -130,6 +137,13 @@ void update_class_name(Course*& cur)
 	cout << "Update successfully!" << endl;
 }
 
+void update_teacher_name(Course*& cur)
+{
+	cout << "Enter new Teacher Name: ";
+	getline(cin, cur->class_name);
+	cout << "Update successfully!" << endl;
+}
+
 void update_number_credits(Course*& cur)
 {
 	cout << "Enter new Number of Credits: ";
@@ -178,11 +192,12 @@ void update(Course*& cur)
 		cout << "1. Course ID" << endl;
 		cout << "2. Course Name" << endl;
 		cout << "3. Class Name" << endl;
-		cout << "4. Number of credits " << endl;
-		cout << "5, Number of students" << endl;
-		cout << "6. Day of the week" << endl;
-		cout << "7. Sessions" << endl;
-		cout << "8. All of above " << endl;
+		cout << "4. Teacher Name" << endl;
+		cout << "5. Number of credits " << endl;
+		cout << "6, Number of students" << endl;
+		cout << "7. Day of the week" << endl;
+		cout << "8. Sessions" << endl;
+		cout << "9. All of above " << endl;
 		cout << "0. Exit" << endl;
 		int option;
 		cin >> option;
@@ -198,22 +213,26 @@ void update(Course*& cur)
 			update_class_name(cur);
 			break;
 		case 4:
-			update_number_credits(cur);
+			update_teacher_name(cur);
 			break;
 		case 5:
-			update_number_students(cur);
+			update_number_credits(cur);
 			break;
 		case 6:
-			update_day_week(cur);
+			update_number_students(cur);
 			break;
 		case 7:
-			update_session(cur);
+			update_day_week(cur);
 			break;
 		case 8:
+			update_session(cur);
+			break;
+		case 9:
 		{
 			update_course_ID(cur);
 			update_course_name(cur);
 			update_class_name(cur);
+			update_teacher_name(cur);
 			update_number_credits(cur);
 			update_number_students(cur);
 			update_day_week(cur);
