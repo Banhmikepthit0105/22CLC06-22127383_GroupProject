@@ -1,6 +1,6 @@
 
 #define _CRT_SECURE_NO_WARNINGS
-
+#define BACKSLASH '\\'
 #ifndef _FUCNTION_H_
 #define _FUNCTION_H_
 
@@ -11,6 +11,8 @@
 #include <fstream>
 #include <iomanip>
 #include <cmath>
+#include <cstdio>
+
 typedef long long ll;
 typedef long int li;
 
@@ -29,7 +31,7 @@ struct Course
 	Course* pNext;
 };
 
-void displayCourse(Course* pHead);
+void printCourseToConsole(Course* pHead);
 
 void addCourse(Course*& pHead);
 

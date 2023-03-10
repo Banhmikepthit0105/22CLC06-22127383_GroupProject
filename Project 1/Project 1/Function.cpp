@@ -1,7 +1,160 @@
 #include "Function.h"
 
-void displayCourse(Course* pHead)
+string currentSchoolYear_Semester_Cpp_string()
 {
+	ifstream current_schoolYear, current_semester;
+	string currentSchoolYear, currentSemester;
+
+	//Open file named currentSchoolYear, which contained a current School Year (The latest school year which users have entered).
+	current_schoolYear.open("currentSchoolYear.txt");
+	if (!current_schoolYear.is_open())
+	{
+		cout << "Khong mo duoc file currentSchoolYear.txt";
+		return NULL;
+	}
+	current_schoolYear >> currentSchoolYear;
+	current_schoolYear.close();
+
+	//Open file named currentSemester, which contained a current semester (The latest semester which user have entered)
+	current_semester.open("currentSemester.txt");
+	if (!current_semester.is_open())
+	{
+		cout << "Khong mo duoc file currentSemester.txt";
+		return NULL;
+	}
+	current_semester >> currentSemester;
+	current_semester.close();
+
+	currentSchoolYear += "\\" + currentSemester + "\\";
+
+	return currentSchoolYear;
+
+}
+
+char* currentShoolYear_Semester_C_String(int getID)
+{
+	char a[200];
+	int k = 0;
+
+	//The purpose of these below actions is used for getting a path of the Course that will be deleted
+	//the remove() function is only used in C string, so I cannot use a C++ string to assign in this function. It will get error.
+
+
+	//Path update: CURRENTSCHOOLYEAR//CURRENTSEMESTER//
+	for (int i = 0; i < currentSchoolYear_Semester_Cpp_string().size(); ++i)
+	{
+		a[++k] = currentSchoolYear_Semester_Cpp_string()[i];
+	}
+
+	//Path update: CURRENTSCHOOLYEAR//CURRENTSEMESTER//course
+	string course = "course";
+	for (int i = 0; i < course.size(); ++i)
+		a[++k] = course[i];
+
+	//Path update: CURRENTSCHOOLYEAR//CURRENTSEMESTER//courseID
+	for (int i = 0; i < to_string(getID).size(); ++i)
+		a[++k] = to_string(getID)[i];
+
+	//Path update: CURRENTSCHOOLYEAR//CURRENTSEMESTER//courseID.txt
+	string txt = ".txt";
+	for (int i = 0; i < txt.size(); ++i)
+		a[++k] = txt[i];
+
+	//Assign the operator '\n' is to notify this is the end of the string of characters. 
+	a[k] = '\n';
+	return a;
+}
+
+
+void getCourseDataFromFile(Course*& pHead)
+{
+	ifstream file;
+	file.open(currentSchoolYear_Semester_Cpp_string() + "listOfCourse.txt");
+	if (!file.is_open())
+	{
+		cout << "Khong mo duoc file";
+		return;
+	}
+
+	Course* pCur = pHead;
+
+	//Get the data and save to the list of Course until it read to the end of the file
+	while (!file.eof())
+	{
+		//if pHead is nullpointer, create new one
+		if (pHead == nullptr)
+		{
+			pHead = new Course;
+			pCur = pHead;
+		}
+
+		//if pHead is not nullpointer, means there is data in the list of Nodes, so add one next to the current.
+		else
+		{
+			pCur->pNext = new Course;
+			pCur = pCur->pNext;
+		}
+
+		string id;
+		getline(file, id, ',');
+		pCur->id = stoi(id);
+
+		getline(file, pCur->course_name, ',');
+		getline(file, pCur->class_name, ',');
+		getline(file, pCur->teacher_name, ',');
+
+
+
+		string number_credits;
+		getline(file, number_credits, ',');
+		pCur->number_credits = stoi(number_credits);
+
+		string number_students;
+		getline(file, number_students, ',');
+		pCur->number_students = stoi(number_students);
+
+		getline(file, pCur->day_of_week, ',');
+
+
+		getline(file, pCur->sessions, '\n');
+
+		pCur->pNext = nullptr;
+	}
+}
+
+
+
+void printCourseToFile(Course* pHead)
+{
+	ofstream file;
+	file.open(currentSchoolYear_Semester_Cpp_string() + "listOfCourse.txt");
+
+	Course* pCur = pHead;
+
+	//print the data from courses to file .txt.
+	while (pCur != nullptr)
+	{
+		file << pCur->id << ","
+			<< pCur->course_name << ","
+			<< pCur->class_name << ","
+			<< pCur->teacher_name << ","
+			<< pCur->number_credits << ","
+			<< pCur->number_students << ","
+			<< pCur->day_of_week << ","
+			<< pCur->sessions << endl;
+
+		pCur = pCur->pNext;
+	}
+
+	file.close();
+
+}
+
+
+void printCourseToConsole(Course* pHead)
+{
+	//print to Console the Courses which have the format:
+	//Course_ID---Course_name---Class_name---Teacher_name---Number_of_Credits---Number_of_maximum_students---Day_of_week---Sessions
 	cout
 		<< setw(15)
 		<< "Course ID"
@@ -45,39 +198,57 @@ void displayCourse(Course* pHead)
 
 void addCourse(Course*& pHead)
 {
-	Course* cur;
-	cur = pHead;
-	pHead = new Course;
+	Course* pCur;
+	pCur = pHead;
+
+	while (pCur->pNext != nullptr)
+	{
+		pCur = pCur->pNext;
+	}
+	pCur->pNext = new Course;
+	pCur = pCur->pNext;
 
 	cout << "Enter Course ID";
-	cin >> pHead->id;
+	cin >> pCur->id;
+
+	string courseID = to_string(pCur->id);
 
 	cout << "Enter Course Name";
-	getline(cin, pHead->course_name);
-	cin.ignore();
+	cin >> pCur->course_name;
 
 	cout << "Enter Class Name";
-	getline(cin, pHead->class_name);
+	cin >> pCur->class_name;
 
 	cout << "Enter Teacher Name";
-	getline(cin, pHead->teacher_name);
+	cin >> pCur->teacher_name;
 
 	cout << "Enter Number of credits: ";
-	cin >> pHead->number_credits;
+	cin >> pCur->number_credits;
 
 	cout << "Enter Number of students: ";
-	cin >> pHead->number_students;
+	cin >> pCur->number_students;
 
 	cout << "    Enter day of week" << endl;
 	cout << "MON / TUE / WED / THU / FRI / SAT ";
-	cin >> pHead->day_of_week;
+	cin >> pCur->day_of_week;
+
 
 	cout << "    Enter session" << endl;
 	cout << "S1(07:30) -- S2 (09:30) -- S3(13:30) -- S4(15:30)";
-	cin >> pHead->sessions;
+	cin >> pCur->sessions;
+
+	pCur->pNext = nullptr;
 
 
-	pHead->pNext = cur;
+	//Save new list of courses into the file, which contained the list of Courses, and it is stored in folder
+	// "CURRENTSCHOOLYEAR//CURRENTSEMESTER//listOfCourse.txt"
+	printCourseToFile(pHead);
+
+	//After adding a new course to a new file, and a list of Courses in the system, means that creating a new file, which named courseID.txt
+	//It stored the list of students enrolled in the courses.
+	ofstream create_file;
+	create_file.open(currentSchoolYear_Semester_Cpp_string() + "course" + courseID + ".txt", ofstream::out, ofstream::app);
+	create_file.close();
 }
 
 void deleteCourse(Course*& pHead)
@@ -90,6 +261,7 @@ void deleteCourse(Course*& pHead)
 		cout << "Invalid input. Please try a new course ID: ";
 		cin >> getID;
 	}
+	//the remove Course will be located in Folder:  CURRENTSCHOOLYEAR//CURRENTSEMESTER//courseID.txt
 
 	Course* cur;
 	cur = pHead;
@@ -106,6 +278,15 @@ void deleteCourse(Course*& pHead)
 		else
 			temp->pNext = cur->pNext;
 		delete cur;
+
+		//Save new list of courses into the file, which contained the list of Courses, and it is stored in folder
+		// "CURRENTSCHOOLYEAR//CURRENTSEMESTER//listOfCourse.txt"
+		printCourseToFile(pHead);
+
+
+		//the remove() functions can delete a file .txt
+
+		remove(currentShoolYear_Semester_C_String(getID));
 		return;
 	}
 	cout << "There is no Course ID matching with your typing: " << endl;
@@ -238,7 +419,7 @@ void update(Course*& cur)
 			update_day_week(cur);
 			update_session(cur);
 		}
-			break;
+		break;
 		case 0:
 			return;
 		default:
@@ -250,7 +431,7 @@ void update(Course*& cur)
 void updateCourse(Course*& pHead)
 {
 	Course* cur = pHead;
-	displayCourse(pHead);
+	printCourseToConsole(pHead);
 	cout << "Enter the Course ID which have to be updated ";
 	int getID;
 	cin >> getID;
@@ -259,6 +440,7 @@ void updateCourse(Course*& pHead)
 		if (getID == cur->id)
 		{
 			update(cur);
+			printCourseToFile(pHead);
 			cout << "Update successfully!";
 			return;
 		}
@@ -281,20 +463,20 @@ void deAllocateCourse(Course*& pHead)
 }
 
 
-void addStudentCourse(ofstream& csvfile, Course* pHead)
+void addStudentCourseWithConsole(Course* pHead)
 {
 	int getID;
-	string get;
+	string course_ID;
 	cout << "Enter the course ID: ";
-	cin >> get;
+	cin >> course_ID;
 
-	getID = stoi(get);
+	getID = stoi(course_ID);
 	bool isFound = false;
 
 	Course* cur;
 	cur = pHead;
 
-	
+
 	while (cur != nullptr && cur->id != getID)
 	{
 		cur = cur->pNext;
@@ -304,26 +486,52 @@ void addStudentCourse(ofstream& csvfile, Course* pHead)
 	{
 		isFound = true;
 	}
-	
+
 	if (!isFound)
 	{
 		cout << "There is no course ID matching with your typing ";
 		return;
 	}
-	int ID_student;
-	cout << "Enter ID of student: ";
-	cin >> ID_student;
-	string s1;
-	cout << "Enter name of student: ";
-	getline(cin, s1);
-	csvfile.open("course" + get + ".csv", ios::app);
-	csvfile << ID_student << "," << s1;
 
-	csvfile.close();
+	int ID_student;
+	cout << "Enter ID: ";
+	cin >> ID_student;
+
+	string first_name;
+	cout << "Enter first name: ";
+	cin >> first_name;
+
+	string last_name;
+	cout << "Enter last name: ";
+	cin >> last_name;
+
+	string gender;
+	cout << "Enter gender: (NAM/NU)";
+	cin >> gender;
+
+	string date_of_birth;
+	cout << "Enter date of birth: ";
+	cin >> date_of_birth;
+
+	int social_ID;
+	cout << "Enter social ID: ";
+	cin >> social_ID;
+
+	ofstream file;
+	//open the file which located in Folder:  "CURRENTSCHOOLYEAR//CURRENTSEMSTER//courseID.txt"
+	file.open(currentSchoolYear_Semester_Cpp_string() + "course" + course_ID + ".txt", ios::app);
+	file << endl;
+	file << ID_student << ","
+		<< first_name << ","
+		<< last_name << ","
+		<< gender << ","
+		<< date_of_birth << ","
+		<< social_ID;
+	file.close();
 	cout << "Add Student to Course successfully";
 }
 
-void deleteStudentCourse(ofstream& csvfile, Course* pHead)
+void removeStudentFromCourse(ofstream& file, Course* pHead)
 {
 	int getID;
 	string get;
@@ -357,8 +565,6 @@ void deleteStudentCourse(ofstream& csvfile, Course* pHead)
 	cout << "Enter ID of student you want to delete: ";
 	cin >> ID_student;
 
-	while (!csvfile.eof())
-	{
 
-	}
+
 }
